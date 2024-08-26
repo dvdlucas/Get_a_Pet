@@ -1,4 +1,8 @@
 import express from "express";
+import cors from "cors";
+import connectDatabase from "./db/conn.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -10,4 +14,9 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Servidor funcionando, hahahahahah" });
 });
 
-app.listen(3000);
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+
+app.use(express.static("public"));
+
+connectDatabase();
+app.listen(5000);
