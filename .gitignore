@@ -6,4 +6,4 @@ node_modules/
 .pdf
 .env
 .session/
-.pets/
+pets/
