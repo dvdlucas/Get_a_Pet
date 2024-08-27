@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import connectDatabase from "./db/conn.js";
 import dotenv from "dotenv";
+import UserRouter from "./routes/userRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -10,9 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "Servidor funcionando, hahahahahah" });
-});
+app.use("/users", UserRouter);
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
