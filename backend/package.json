@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./index.js localhost:3000"
+    "start": "nodemon ./index.js localhost:3000"
   },
   "keywords": [
     "api",

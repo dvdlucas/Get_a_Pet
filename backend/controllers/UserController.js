@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import UserServices from "../services/UserServices.js";
 
 class UserController {
   static async getAll(req, res) {
@@ -11,10 +12,9 @@ class UserController {
   }
 
   static async createUser(req, res) {
-    const { name, email, phone, password, image } = req.body;
-    const user = new User({ name, email, phone, password, image });
     try {
-      const savedUser = await user.save();
+      const userData = req.body;
+      const savedUser = await UserServices.createUser(userData);
       res.status(200).json({ message: "Usuario cadastrado", user: savedUser });
     } catch (error) {
       res.status(500).json({ error: error.message });
