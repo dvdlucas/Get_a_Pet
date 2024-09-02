@@ -1,4 +1,4 @@
-import PetService from "../services/PetRepository.js";
+import PetService from "../services/PetService.js";
 
 class PetController {
   static async getAll(req, res) {

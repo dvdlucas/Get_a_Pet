@@ -1,4 +1,5 @@
 import UserRepository from "../repositories/UserRepository.js";
+import bcrypt from "bcrypt";
 
 class UserServices {
   static async createUser(userData) {
@@ -15,11 +16,15 @@ class UserServices {
       throw new Error("As senhas precisam ser iguais");
     }
 
+    //create password encrypted
+    const salt = await bcrypt.genSalt(12);
+    const passwordHash = await bcrypt.hash(password, salt);
+
     const newUser = await UserRepository.createUser({
       name,
       email,
       phone,
-      password,
+      password: passwordHash,
     });
     return newUser;
   }
