@@ -45,5 +45,9 @@ class UserServices {
   static async getUserByToken(token) {
     return await UserRepository.findById(token.id);
   }
+
+  static async getById(id) {
+    return await UserRepository.findById(id);
+  }
 }
 export default UserServices;

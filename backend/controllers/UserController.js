@@ -44,7 +44,23 @@ class UserController {
       const token = req.headers.authorization;
       const user = await UserServices.getUserByToken(token);
       res.status(200).json({ user });
-    } catch (error) {}
+    } catch (error) {
+      res.status(401).json({
+        message: error.message,
+      });
+    }
+  }
+
+  static async getById(req, res) {
+    const id = req.params.id;
+    try {
+      const user = await UserServices.getById(id);
+      res.status(201).json({ user });
+    } catch (error) {
+      res.status(401).json({
+        message: error.message,
+      });
+    }
   }
 }
 export default UserController;

@@ -14,7 +14,7 @@ class UserRepository {
   }
 
   static async findById(id) {
-    return await User.User.findByPk(id);
+    return await User.findById(id);
   }
 }
 export default UserRepository;
