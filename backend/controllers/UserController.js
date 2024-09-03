@@ -14,12 +14,29 @@ class UserController {
   static async createUser(req, res) {
     try {
       const userData = req.body;
-      const savedUser = await UserServices.createUser(userData);
-      res.status(200).json({ message: "Usuario cadastrado", user: savedUser });
+      const token = await UserServices.createUser(userData);
+      res.status(201).json({
+        message: "Usuário registrado com sucesso",
+        token,
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }
-}
 
+  static async loginUser(req, res) {
+    try {
+      const { email, password } = req.body;
+      const token = await UserServices.loginUser(email, password);
+      res.status(200).json({
+        message: "Usuário Logado com sucesso",
+        token,
+      });
+    } catch (error) {
+      res.status(401).json({
+        message: error.message && "Credenciais inválidas",
+      });
+    }
+  }
+}
 export default UserController;

@@ -1,3 +1,4 @@
+import createUserToken from "../helpers/create-user-token.js";
 import UserRepository from "../repositories/UserRepository.js";
 import bcrypt from "bcrypt";
 
@@ -26,7 +27,19 @@ class UserServices {
       phone,
       password: passwordHash,
     });
-    return newUser;
+    return await createUserToken(newUser);
+  }
+
+  static async loginUser(email, password) {
+    const user = await UserRepository.findByEmail(email);
+    if (!user) throw new Error("Usuário não encontrado");
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+    if (!checkPassword) throw new Error("Senha incorreta!");
+
+    const token = await createUserToken(user);
+
+    return token;
   }
 }
 export default UserServices;

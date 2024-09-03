@@ -8,4 +8,6 @@ const createUserToken = async (user, rs, res) => {
     },
     "nossosecret"
   );
+  return token;
 };
+export default createUserToken;
