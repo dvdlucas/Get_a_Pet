@@ -38,5 +38,13 @@ class UserController {
       });
     }
   }
+
+  static async checkUser(req, res) {
+    try {
+      const token = req.headers.authorization;
+      const user = await UserServices.getUserByToken(token);
+      res.status(200).json({ user });
+    } catch (error) {}
+  }
 }
 export default UserController;

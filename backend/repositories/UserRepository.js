@@ -12,5 +12,9 @@ class UserRepository {
   static async findByEmail(email) {
     return await User.findOne({ email });
   }
+
+  static async findById(id) {
+    return await User.User.findByPk(id);
+  }
 }
 export default UserRepository;
