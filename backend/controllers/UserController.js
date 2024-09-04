@@ -58,6 +58,19 @@ class UserController {
       res.status(201).json({ user });
     } catch (error) {
       res.status(401).json({
+        message: "Usuário não encontrado",
+      });
+    }
+  }
+
+  static async editUser(req, res) {
+    try {
+      const id = req.params.id;
+      const userData = req.body;
+      await UserServices.editUser(id, userData);
+      res.status(200).json({ message: "Usuário Atualizado com sucesso" });
+    } catch (error) {
+      res.status(401).json({
         message: error.message,
       });
     }
