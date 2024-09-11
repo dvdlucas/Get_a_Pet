@@ -4,20 +4,23 @@ import bcrypt from "bcrypt";
 
 class UserServices {
   static async createUser(userData) {
-    const { name, email, phone, password, confirmPassword } = userData;
+    const { name, email, phone, password, confirmPassword, image } = userData;
 
-    // Validação
     if (!name || !email || !phone || !password || !confirmPassword) {
       throw new Error("Todos os campos são obrigatórios");
     }
 
     const userExists = await UserRepository.findByEmail(email);
     if (userExists) throw new Error("Já existe um usuário com esse email");
+
     if (password !== confirmPassword) {
       throw new Error("As senhas precisam ser iguais");
     }
 
-    //create password encrypted
+    if (password.length < 4) {
+      throw new Error("A senha deve ter no mínimo 8 caracteres");
+    }
+
     const salt = await bcrypt.genSalt(12);
     const passwordHash = await bcrypt.hash(password, salt);
 
@@ -26,6 +29,7 @@ class UserServices {
       email,
       phone,
       password: passwordHash,
+      image: image,
     });
     return await createUserToken(newUser);
   }
@@ -48,12 +52,12 @@ class UserServices {
 
   static async getById(id) {
     const user = await UserRepository.findById(id);
-    if (!user) throw new Error("Usuário naõ encontrado");
+    if (!user) throw new Error("Usuário não encontrado");
     return user;
   }
 
   static async editUser(id, userData) {
-    const { email, phone, password, confirmPassword } = userData;
+    const { email, phone, password, confirmPassword, image } = userData;
 
     if (!email || !phone) throw new Error("Email e telefone são obrigatórios");
     const user = await UserRepository.findById(id);
@@ -63,6 +67,7 @@ class UserServices {
       throw new Error("Já existe um usuário com esse email");
     user.email = email;
     user.phone = phone;
+    user.image = image;
     if (password && password === confirmPassword) {
       const salt = await bcrypt.genSalt(12);
       const passwordHash = await bcrypt.hash(password, salt);

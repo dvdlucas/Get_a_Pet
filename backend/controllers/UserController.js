@@ -14,13 +14,30 @@ class UserController {
   static async createUser(req, res) {
     try {
       const userData = req.body;
+
+      if (req.file) {
+        userData.image = req.file.filename;
+      } else {
+        return res.status(400).json({ error: "A imagem é obrigatória" });
+      }
+
       const token = await UserServices.createUser(userData);
       res.status(201).json({
         message: "Usuário registrado com sucesso",
         token,
       });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      if (
+        error.message.includes("obrigatório") ||
+        error.message.includes("senhas")
+      ) {
+        return res.status(400).json({ error: error.message });
+      }
+
+      if (error.message.includes("email")) {
+        return res.status(409).json({ error: error.message });
+      }
+      res.status(500).json({ error: "Erro interno no servidor" });
     }
   }
 
@@ -67,6 +84,11 @@ class UserController {
     try {
       const id = req.params.id;
       const userData = req.body;
+      if (req.file) {
+        userData.image = req.file.filename;
+      } else {
+        return res.status(400).json({ error: "A imagem é obrigatória" });
+      }
       await UserServices.editUser(id, userData);
       res.status(200).json({ message: "Usuário Atualizado com sucesso" });
     } catch (error) {
